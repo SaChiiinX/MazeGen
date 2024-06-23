@@ -1,4 +1,4 @@
-import {Directions} from "./Utility";
+import {Directions} from "./utility";
 export interface Node {
     solution?: boolean;
     location: readonly [number, number];

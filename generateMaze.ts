@@ -1,4 +1,4 @@
-import {Directions} from "./Utility";
+import {Directions} from "./utility";
 
 
 interface MazeM{
@@ -18,7 +18,7 @@ interface NodeM{
     ValidS?: boolean;
     ValidW?: boolean;
     //walls
-    walls?: number[];
+    walls: number[];
 }
 
 function intializeMazeNodes(maze: MazeM){
@@ -31,8 +31,9 @@ function intializeMazeNodes(maze: MazeM){
         for(let j = 0; j < col; j++){
             let tempWalls: number[] = [];
             let temp: NodeM ={
-                visited: false, 
-                directions: [null, null, null, null]
+                visited: false,
+                directions: [undefined as any, undefined as any, undefined as any, undefined as any],
+                walls: []
             };
 
             // intialize North and South directions
@@ -76,10 +77,9 @@ function intializeMazeNodes(maze: MazeM){
 }
 
 function connectNodes(maze: MazeM, curNode: NodeM, location: number){
-    let nodes: Array<NodeM> = maze.nodes;
+    let nodes: Array<NodeM> = maze.nodes!;
     let cols: number = maze.width;
     curNode.visited = true;
-    
     
 
     if(curNode.ValidN){
@@ -122,9 +122,12 @@ function connectNodes(maze: MazeM, curNode: NodeM, location: number){
 function getRandomDirection(node: NodeM){
     let tempNode: NodeM;
 
-    while(!tempNode){
+    while(true){
+        // Gets a random index from 0-3
         let index: number = Math.floor(Math.random()*4);
+        // Gets corresponding node to index
         tempNode = node.directions[index];
+
         if(!tempNode.visited){
             let tempIndex: number = node.walls.indexOf((index+2)%4);
             let lastIndex: number = node.walls.length -1;
@@ -134,7 +137,7 @@ function getRandomDirection(node: NodeM){
                 node.walls[tempIndex] = holder;
             }
             node.walls.pop();
-
+    
             tempIndex = tempNode.walls.indexOf((index+2)%4);
             lastIndex = tempNode.walls.length -1;
             if(tempIndex != lastIndex){
@@ -142,10 +145,12 @@ function getRandomDirection(node: NodeM){
                 tempNode.walls[lastIndex] = tempNode.walls[tempIndex];
                 tempNode.walls[tempIndex] = holder;
             }
+            
             tempNode.walls.pop();
+            break;
         }
-    }
-    
+    } 
+
     return tempNode;
 }
 
@@ -168,7 +173,7 @@ function makePaths(maze: MazeM, curNode: NodeM){
 }
 
 function toString(maze: MazeM){
-    let nodes: Array<NodeM> = maze.nodes;
+    let nodes: Array<NodeM> = maze.nodes!;
     let row : number = maze.height;
     let col : number = maze.width;
 
@@ -205,7 +210,8 @@ function toString(maze: MazeM){
     retString += northSouth.repeat(col);
 }
 
-let maze: MazeM = {height: 3, width: 3};
-intializeMazeNodes(maze);
-let output = toString(maze);
+//let maze: MazeM = {height: 3, width: 3};
+//intializeMazeNodes(maze);
+//let output = toString(maze);
+let output = "Hello World";
 console.log(output);
